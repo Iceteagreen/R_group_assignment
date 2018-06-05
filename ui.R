@@ -44,13 +44,28 @@ dashboardBody(
     tabItem(tabName = "crypto",
             h2("A brief introduction"),
             fluidRow(
-              infoBox("new", 101010,
-                      icon = icon("users")),
-              infoBox("new", 101010,
-                      icon = icon("users")),
-              infoBox("new", 101010,
-                      icon = icon("users"))
+              infoBox("Different coins", 1640,
+                      icon = icon("bitcoin")),
+              infoBox("Amount of wallets", 23952849,
+                      icon = icon("briefcase")),
+              infoBox("Total market value", 334436919408,
+                      icon = icon("dollar"))
+            ),
+            fluidRow(
+              box(
+                "Blockchain and crypto's",
+                br(),
+                "More Box content"
+              ),
+              box(
+                "Usage and coins",
+                br(),
+                "More Box content"
+              )
+              
+              
             )
+              
 
     ),
     tabItem(tabName = "origin",
