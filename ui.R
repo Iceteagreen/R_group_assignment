@@ -30,7 +30,7 @@ dashboardPage(
                tabName = "package",
                icon = icon("google")),
       menuItem("Data Overview",
-               tabName = "data_overviw",
+               tabName = "data_overview",
                icon = icon("google")),
       menuItem("Visualizations",
                tabName = "visualizations",
