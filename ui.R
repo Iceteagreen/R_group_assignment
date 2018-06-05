@@ -48,16 +48,23 @@ dashboardBody(
             h2("The origin of the data"),
             
             box(
-              "Box 1 content",
-              br(),
-              "More Box content"
+              "Box 1 content"
             )
             ),
+    
     tabItem(tabName = "question",
-            h2("The research questions")
+            h2("The research questions"),
+            
+            box(
+              "Box 1 content"
+            )
             ),
     tabItem(tabName = "package",
-            h2("Elaboration on used packages")
+            h2("Elaboration on used packages"),
+            
+            box(
+              "Box 1 content"
+            )
             ),
     tabItem(tabName = "data_overview",
             h2("Overview of the data")
