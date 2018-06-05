@@ -45,7 +45,13 @@ dashboardBody(
             h2("A brief introduction")
     ),
     tabItem(tabName = "origin",
-            h2("The origin of the data")
+            h2("The origin of the data"),
+            
+            box(
+              "Box 1 content",
+              br(),
+              "More Box content"
+            )
             ),
     tabItem(tabName = "question",
             h2("The research questions")
