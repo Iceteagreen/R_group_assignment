@@ -17,6 +17,9 @@ dashboardPage(
   
   dashboardSidebar(
     sidebarMenu(
+      menuItem("Introduction to cryptocurrency",
+               tabName = "crypto",
+               icon = icon("google")),
       menuItem("The origin of the Data",
                tabName = "origin",
                icon = icon("google")),
@@ -38,6 +41,9 @@ dashboardPage(
   
 dashboardBody(
   tabItems(
+    tabItem(tabName = "crypto",
+            h2("A brief introduction")
+    ),
     tabItem(tabName = "origin",
             h2("The origin of the data")
             ),
