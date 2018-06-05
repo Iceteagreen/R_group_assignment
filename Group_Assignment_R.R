@@ -2,6 +2,13 @@
 ## Cleaning memory -------------------------------------------------------------
   rm(list = ls())
 
+## Install libraries -----------------------------------------------------------
+  install.packages("psych")             # For the Explanetory Descriptive Analysis (EDA)
+  install.packages("e1071")             # For the SVM - The prediction
+  install.packages("timeSeries")        # Time Serie Analysis
+  install.packages("shiny")             # For the dashboard
+  install.packages("shinydashboard")    # For the dashboard
+
 ## Loading libraries -----------------------------------------------------------
   library(psych)             # For the Explanetory Descriptive Analysis (EDA)
   library(e1071)             # For the SVM - The prediction
