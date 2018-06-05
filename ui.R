@@ -42,7 +42,16 @@ dashboardPage(
 dashboardBody(
   tabItems(
     tabItem(tabName = "crypto",
-            h2("A brief introduction")
+            h2("A brief introduction"),
+            fluidRow(
+              infoBox("new", 101010,
+                      icon = icon("users")),
+              infoBox("new", 101010,
+                      icon = icon("users")),
+              infoBox("new", 101010,
+                      icon = icon("users"))
+            )
+
     ),
     tabItem(tabName = "origin",
             h2("The origin of the data"),
