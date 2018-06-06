@@ -8,6 +8,8 @@
 #
 #install.packages("shinydashboard")
 #library(shinydashboard)
+install.packages("timeSeries")
+library(timeSeries)
 
 dashboardPage(
   dashboardHeader(
