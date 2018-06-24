@@ -7,8 +7,8 @@
 #    http://shiny.rstudio.com/
 #
 #install.packages("shinydashboard")
-#library(shinydashboard)
-install.packages("timeSeries")
+library(shinydashboard)
+#install.packages("timeSeries")
 library(timeSeries)
 
 dashboardPage(
@@ -106,10 +106,28 @@ Currently, accounting firms and banks are experimenting with blockchain applicat
             h2("Overview of the data")
             ),
     tabItem(tabName = "visualizations",
-            h2("Data visualizations")
+            h2("Data visualizations"),
+            box(width = 3,
+              helpText("Show cryptocurrency value
+                       for selected period."),
+              selectInput("coin", 
+                          label = "Choose a currency to display",
+                          choices = list("Bitcoin" = "BTC",
+                                         "Ethereum" = "ETH",
+                                         "Ripple" = "XRP", 
+                                         "Bitcoin Cash" = "BCH"),
+                          selected = "BTC"),
+              sliderInput("range", 
+                          label = "Range of interest:",
+                          min = 2010, max = 2018, value = c(2010, 2018))
+              ),
+            box(width = 9,
+              textOutput("selected_coin"),
+              textOutput("min_max"),
+              plotOutput("plot1")
             )
+    )
+    )
   )
-  
-),
 )
 
