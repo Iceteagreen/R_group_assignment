@@ -83,8 +83,9 @@ dashboardBody(
                 decentralization of economic power, efficiency improvements, 
                 reduction in transactions costs (no brokerage or banks needed). 
                 Furthermore, firms are increasingly interested in the benefits 
-                of blockchain technology (Harvard Law School Forum, 2018). Currently, accounting firms and banks 
-                are experimenting with blockchain applications such as smart 
+                of blockchain technology (Harvard Law School Forum, 2018). 
+                Currently, accounting firms and banks are experimenting with 
+                blockchain applications such as smart 
                 contracts, a contract embedded in computer code that executes an
                 agreement. This contract makes use of the blockchain platform in
                 order to automatically execute all points in the agreement
@@ -187,6 +188,9 @@ dashboardBody(
                 and converting the remaining strings in numeric values. Finaly, 
                 in dealing with missing values (NAs) in the data set, it was 
                 determined to take the mean values of the particular columns.", 
+                width = 12),
+            box(h3("Explanation of the variables"),
+                "",
                 width = 12)
             ),
     tabItem(tabName = "visualizations",

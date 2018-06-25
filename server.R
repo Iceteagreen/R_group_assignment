@@ -1,62 +1,88 @@
-### Group Assignment Epsilon ---------------------------------------------------
-## Cleaning memory -------------------------------------------------------------
-#rm(list = ls())
+# Loading Packages -------------------------------------------------------------
+library(plotly)
+library(dplyr)
+library(caret)
 
-## Install libraries -----------------------------------------------------------
-#install.packages("psych")             # For the Explanetory Descriptive Analysis (EDA)
-#install.packages("e1071")             # For the SVM - The prediction
-#install.packages("timeSeries")        # Time Serie Analysis
-#install.packages("shiny")             # For the dashboard
-#install.packages("shinydashboard")    # For the dashboard
+# Loading the dataset ----------------------------------------------------------
+crypto_prices <- read.csv('input/crypto_prices.csv')
+# Subsetting the top 4 coins ------------------------------------------------------------------
+prices <- subset(crypto_prices, coin == "BTC" | 
+                   coin == "ETH" | 
+                   coin == "XRP" | 
+                   coin == "BCH")
 
-## Loading libraries -----------------------------------------------------------
-library(psych)             # For the Explanetory Descriptive Analysis (EDA)
-library(e1071)             # For the SVM - The prediction
-library(timeSeries)        # Time Serie Analysis
-library(shiny)             # For the dashboard
-library(shinydashboard)    # For the dashboard
-library(ggplot2)           # Plot
+# Creating months --------------------------------------------------------------
+prices$Months <- substr(prices$Date, 6, 7)
+prices$Year <- substr(prices$Date, 1, 4)
+prices$Day <- substr(prices$Date, 9, 10)
+prices$Month_Year <- paste(prices$Year, prices$Months, sep = "-")
 
-## Loading datasets ------------------------------------------------------------
-crypto_pricelist <- read.csv("input/crypto_pricelist.csv", 
-                             stringsAsFactors = FALSE)
+# Cleaning variables -----------------------------------------------------------
+prices$Volume <- as.numeric(gsub(",", "", prices$Volume))
+prices$Market.Cap <- as.numeric(gsub(",", "", prices$Market.Cap))
+prices$coin <- as.factor(prices$coin)
 
-df <- read.csv("input/crypto_prices.csv", 
-               stringsAsFactors = FALSE)
+# Removing NA ------------------------------------------------------------------
+prices[is.na(prices[,6]), 6] <- mean(prices[,6], na.rm = TRUE)
+prices[is.na(prices[,7]), 7] <- mean(prices[,7], na.rm = TRUE)
 
-## Cleaning the data -----------------------------------------------------------
-## Cleaning variables --------------------------------------------------------
-df$Volume <- as.numeric(gsub(",", "", df$Volume))
-df$Volume <- df$Volume / 1000
+# Moving average --------------------------------------------------------------- 
+moving_average <- function(x, n){
+  cx <- c(0,cumsum(ifelse(is.na(x), 0, x)))
+  rsum <- (cx[(n+1):length(cx)] - cx[1:(length(cx) - n)]) / n
+}
 
-df$Market.Cap <- as.numeric(gsub(",", "", df$Market.Cap))
-df$Market.Cap <- df$Market.Cap / 1000
+# Creating up / down method ----------------------------------------------------
+prices$market_direction <- "None"
+prices$market_direction <- as.factor(ifelse(prices$Delta < 0, "Down", "Up"))
 
-df$Date <- as.Date(df$Date, "%Y-%m-%d")
+# Train/ Test set --------------------------------------------------------------
+prices %>%
+  group_by(prices, c(Date, coin))
 
-## Clearing NA ---------------------------------------------------------------
-index <- which(is.na(df$Date))        # Selecting NA
-df <- df[-index,]                     # Removing the NA values from data
+index <- nrow(prices) * 0.2
 
-## Creating BTC subset ---------------------------------------------------------
-#BTC <- subset(df, coin == "BTC")
-#ETH <- subset(df, coin == "ETH")
-#XRP <- subset(df, coin == "XRP")
-#BCH <- subset(df, coin == "BCH")
+test <- prices[1:index,]
+train <- prices[index:nrow(prices),]
 
-## EDA -------------------------------------------------------------------------
-#describe(X_BTC)
 
-## Support Vector Machine ------------------------------------------------------
-#model <- tune(svm, Y ~ X ,                     # Grid search results
-#              data = X_BTC,                    # Loading dataset
-#              ranges = list(epsilon = seq(0,0.2,0.01),
-#                            cost = 2^(2:9)))            # Defining the cost function
+# Training a model to predict new prices
+trctrl <- trainControl(method = "repeatedcv", number = 10, repeats = 3)
+model.fit <- train(market_direction ~ Open + Close + 
+                     Volume + Market.Cap + coin + Delta, 
+                   data = train, 
+                   method = "knn",
+                   trControl=trctrl,
+                   preProcess = c("center", "scale"),
+                   tuneLength = 10)
 
-#best_model <- model$best.model
-#Y <- predict(best_model, X_BTC)
-#error <- df$Y - Y
-#RMSE <- rmse(error)
+
+# Validation -------------------------------------------------------------------
+results <- predict(model.fit, test)
+confusionMatrix(results, test$market_direction)
+
+# Visualizing candlestick ------------------------------------------------------
+rs <- list(visible = TRUE, x = 0.5, y = -0.055,
+           xanchor = 'center', yref = 'paper',
+           font = list(size = 9))
+
+p <- plot_ly(data = train, x = ~Month_Year, type = 'candlestick', 
+             open = ~Open, 
+             close = ~Close, 
+             high = ~High, 
+             low = ~Low,
+             color = ~coin) 
+pp <- train %>%
+  plot_ly(x = ~Month_Year, y = ~Volume, type='bar', name = "Volume",
+          color = ~market_direction, colors = c('#17BECF','#7F7F7F')) %>%
+  layout(yaxis = list(title = "Volume"))
+p <- subplot(p, pp, heights = c(0.7,0.2), nrows=2,
+             shareX = TRUE, titleY = TRUE) %>%
+  layout(xaxis = list(rangeselector = rs),
+         legend = list(orientation = 'h', x = 0.5, y = 1,
+                       xanchor = 'center', yref = 'paper',
+                       font = list(size = 10),
+                       bgcolor = 'transparent'))
 
 ## Dashboard Set Up ------------------------------------------------------------
 server <- function(input, output) {
