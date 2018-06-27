@@ -129,6 +129,26 @@ dashboardBody(
               regarding price, change in price, market capitalization, 
               total supply of the coin, and the 24 hour trading volume of the 
               coin (CoinMarketCap, 2018).", width = 12),
+            box(h3("Explanation of the variables"),
+                "Date - the day of recored values",
+                br(),
+                "Open - the opening price (in USD)",
+                br(),
+                "High - the highest price (in USD)",
+                br(),
+                "Low - the lowest price (in USD)",
+                br(),
+                "Close - the closing price (in USD)",
+                br(),
+                "Volume - total exchanged volume (in USD)",
+                br(),
+                "Market.Cap - the total market captipalization for the coin 
+                (in USD)",
+                br(),
+                "coin - the name of the coin",
+                br(),
+                "Delta - calculated as (Close - Open) / Open",
+                width = 12),
             box(h3("Pre-processing"),
                 "Prior to visualizing and modelling the data some cleaning and 
                 sub setting was required. First of all,  due to the size of the 
@@ -142,9 +162,6 @@ dashboardBody(
                 and converting the remaining strings in numeric values. Finaly, 
                 in dealing with missing values (NAs) in the data set, it was 
                 determined to take the mean values of the particular columns.", 
-                width = 12),
-            box(h3("Explanation of the variables"),
-                "",
                 width = 12),
             box(h3("Elaboration on the packages used during the project"),
               "During the research project, several packages were used. 
