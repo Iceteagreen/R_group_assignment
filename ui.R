@@ -234,10 +234,11 @@ dashboardBody(
             ),
     tabItem(tabName = "Results",
             h2("Results", align = 'center'),
+            box("Insert  1st paragraph of Jurgen's result section", width = 12),
             box(h3("KNN prediction of market"),
-                "Insert explanation here", width = 12),
+                "Insert  2st paragraph of Jurgen's result section", width = 12),
             box(h3("Random Forest prediction of market"),
-                "Insert explanation here", width = 12)
+                "Insert  3st paragraph of Jurgen's result section", width = 12)
             ),
     tabItem(tabName = "Conclusion",
             h2("Conclusion", align = 'center'),
