@@ -6,7 +6,8 @@ crypto_prices <- read.csv("input/crypto_prices.csv",
                           header = T, 
                           stringsAsFactors = F)
 
-# Loading libraries  
+# Loading libraries
+library(ggplot2)
 library(plotly)
 library(dplyr)
 library(caret)
@@ -101,9 +102,6 @@ write.csv(train, file = 'plotdata/train.csv', row.names = FALSE)
 # Visualizing candlestick ------------------------------------------------------
 train <- read.csv("plotdata/train.csv", header = T, stringsAsFactors = F)
 
-rs <- list(visible = TRUE, x = 0.5, y = -0.055,
-           xanchor = 'center', yref = 'paper',
-           font = list(size = 9))
 
 p <- plot_ly(data = train, x = ~Month_Year, type = 'candlestick', 
              open = ~Open, 
@@ -112,18 +110,8 @@ p <- plot_ly(data = train, x = ~Month_Year, type = 'candlestick',
              low = ~Low,
              color = ~coin) 
 
-pp <- train %>%
-  plot_ly(x = ~Month_Year, y = ~Volume, type='bar', name = "Volume",
-          color = ~market_direction, colors = c('green','red')) %>%
-          layout(yaxis = list(title = "Volume"))
 
-candlestick <- subplot(p, pp, heights = c(0.7,0.2), nrows=2,
-               shareX = TRUE, titleY = TRUE) %>%
-               layout(xaxis = list(rangeselector = rs),
-               legend = list(orientation = 'h', x = 0.5, y = 1,
-               xanchor = 'center', yref = 'paper',
-               font = list(size = 10),
-               bgcolor = 'transparent'))
+p
 
 ### END OF CODE ###-------------------------------------------------------------
 

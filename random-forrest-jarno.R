@@ -8,6 +8,7 @@ crypto_prices <- read.csv("input/crypto_prices.csv",
 
 # Loading libraries  
 library(plotly)
+
 library(dplyr)
 library(caret)
 

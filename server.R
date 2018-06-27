@@ -12,6 +12,7 @@ rm(list = ls())
 
 ## Loading libraries -----------------------------------------------------------  
 library(plotly)
+library(ggplot2)
 library(dplyr)
 library(caret)
 library(TTR)
@@ -20,29 +21,7 @@ library(TTR)
 # Visualizing candlestick ------------------------------------------------------
 train <- read.csv("plotdata/train.csv", header = T, stringsAsFactors = F)
 
-rs <- list(visible = TRUE, x = 0.5, y = -0.055,
-           xanchor = 'center', yref = 'paper',
-           font = list(size = 9))
 
-p <- plot_ly(data = train, x = ~Month_Year, type = 'candlestick', 
-             open = ~Open, 
-             close = ~Close, 
-             high = ~High, 
-             low = ~Low,
-             color = ~coin) 
-
-pp <- train %>%
-  plot_ly(x = ~Month_Year, y = ~Volume, type='bar', name = "Volume",
-          color = ~market_direction, colors = c('green','red')) %>%
-  layout(yaxis = list(title = "Volume"))
-
-p <- subplot(p, pp, heights = c(0.7,0.2), nrows=2,
-                       shareX = TRUE, titleY = TRUE) %>%
-  layout(xaxis = list(rangeselector = rs),
-         legend = list(orientation = 'h', x = 0.5, y = 1,
-                       xanchor = 'center', yref = 'paper',
-                       font = list(size = 10),
-                       bgcolor = 'transparent'))
 
 ## Dashboard Set Up ------------------------------------------------------------
 server <- function(input, output) {
@@ -69,12 +48,18 @@ server <- function(input, output) {
   
   # Plot 1
   #output$plot1<-renderPlot({
-  #ts}) 
+  #ts})
+  
+  
+  p <- plot_ly(data = train, x = ~Month_Year, type = 'candlestick', 
+               open = ~Open, 
+               close = ~Close, 
+               high = ~High, 
+               low = ~Low,
+               color = ~coin) 
   
   # Plot 2
-  output$plot2<-renderPlot({
-  p},
-  height = 400, width = 600) 
+  output$plot2<-renderPlotly({p})
 }
 
 ### END OF CODE ################################################################
