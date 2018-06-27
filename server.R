@@ -14,8 +14,6 @@ rm(list = ls())
 library(plotly)
 library(ggplot2)
 library(dplyr)
-library(caret)
-library(TTR)
 
 
 # Visualizing candlestick ------------------------------------------------------

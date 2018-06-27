@@ -179,11 +179,11 @@ dashboardBody(
                 determined to take the mean values of the particular columns.", 
                 width = 12),
             box(h3("Time-series of market prices"),
-                "Insert Jurgen's time-series plot",
                 br(),
                 img(src="https://image.ibb.co/kot6C8/timeseries.png", height='400', width='600'),
                 br(),
-                "Insert explanation en conclusion of time-seris plot here",
+                "The time series analysis indicated that the price-levels for 
+                crypto currencies are extremely volatile.",
                 width = 12),
             box(h3("Elaboration on the packages used during the project"),
               "During the research project, several packages were used. 
@@ -243,15 +243,74 @@ dashboardBody(
     ),
     tabItem(tabName = "Results",
             h2("Results", align = 'center'),
-            box("Insert  1st paragraph of Jurgen's result section", width = 12),
-            box(h3("KNN prediction of market"),
-                "Insert  2st paragraph of Jurgen's result section", width = 12),
-            box(h3("Random Forest prediction of market"),
-                "Insert  3st paragraph of Jurgen's result section", width = 12)
+            box("The time series analysis indicated that the price-levels for 
+                crypto currencies are extremely volatile. For this reason, it 
+                would be not achievable to make valid prediction for actual 
+                price-levels in the future. Instead, we focused on predicting 
+                if a particular coin would increase or decrease on a given time 
+                in the future. For this analysis, we added a variable that 
+                derives from the deviation of a coin between two consecutive 
+                days. This variable uses the deviation between a coin from the 
+                day before the prediction. A negative value indicates that the 
+                price of a coin decreased in comparison with the day before, a 
+                positive value means that the price went up. Based on this 
+                information, we designed two predictive models. The first model 
+                uses the K-nearest Neighbor (KNN) classification method to make 
+                a prediction for future increase or decrease in price-levels. 
+                This model uses cross validation to make the samples from the 
+                total dataset less biased. The next model uses the Random Forest 
+                method to make a prediction. This model also uses cross validation 
+                to improve the sampling method. By splitting the data in a train 
+                and test set, we were able to validate the predictive accuracy 
+                of the models.", width = 12),
+            box(h3("KNN predictive model of market"),
+                "This model combines all the data of the four biggest coins on 
+                which this research is based. The model reports that it can 
+                predict with an 0.4873 accuracy if price-levels increase or 
+                decline. This means that an investor would have a 48.73% chance 
+                to make a good informed decision based on this model. ", 
+                width = 12),
+            box(h3("Random Forest predictive model of market"),
+                "This model uses a different predictive functionality than the 
+                KNN model. Therefore, the accuracy may vary from the other model 
+                even though both models use the same data and variables. The 
+                Random Forest model is able to predict if price-levels increase 
+                or decline with an accuracy of 0.4761. This means that the model 
+                predicts 47,61% of the change in price-levels accurately.", 
+                width = 12)
             ),
     tabItem(tabName = "Conclusion",
             h2("Conclusion", align = 'center'),
-            box("Insert conclusion here", width = 12)
+            box("Recent developments in the market of crypto currency sparked 
+            the need for thorough analyses. Making good predictions based on 
+            historical data could help investors decide whether to invest or not.
+            The purpose of this research was to create a statistical model that 
+            would give an accurate prediction on the four biggest crypto 
+            currencies. This model could assist in designing strategical 
+            investment plans that improve the return on investment. In this 
+            research, we analyzed historical data of four different crypto 
+            currencies which were made available from CoinMarketCap. The time 
+            series analysis showed that the price-levels over time are extremely 
+            volatile. This gave the indication that a prediction of the actual 
+            price for a coin on a given time in the future would not be accurate. 
+            Therefore, we focused on predicting positive or negative change in 
+            the price-levels. The first model, which uses the KNN method, 
+            resulted in an accuracy of 0.4873. The second model, which uses the 
+            Random Forest method, acquired an accuracy of 0.4761. The results 
+            suggest that the KNN model fits the data better than the Random 
+            Forest model. However, both models predict under the 50% threshold 
+            which indicates that an investor has a better chance of making a 
+            successful investment decision when flipping a coin. From these 
+            results we can conclude that we are not able to accurately predict 
+            future changes in price-levels. Next to that, the two different 
+            models do vary in accuracy. However, this variation does not clearly 
+            suggest that one of the two models is significantly better in 
+            predicting future price-levels. Additionally, humans behave irrational 
+            on currency markets which makes it difficult to predict future 
+            price-levels solely based on historical data. If it was possible to 
+            make extremely accurate predictions of price-levels based on this 
+            dataset, it would change the whole dynamic of these types of markets.",
+            width = 12)
             ),
     tabItem(tabName = "References",
             h2("References", align = 'center'),
