@@ -34,7 +34,9 @@ btc_time <- ts(btc2)
 btc_time
 
 ## plots for timeseries BTC
-plot.ts(btc_time) # DEZE IN DE DASHBOARD
+plot.ts(btc_time) # This is used in dashboard
+
+## plot on time
 log_btc_time <- log(btc_time)
 plot.ts(log_btc_time)
 

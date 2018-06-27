@@ -96,22 +96,3 @@ confusionMatrix(forest.pred, test$market_direction[2:nrow(test)])
 ## Saving
 write.csv(train, file = 'plotdata/train.csv', row.names = FALSE)
 # END OF CODE  -----------------------------------------------------------------
-
-
-
-# Visualizing candlestick ------------------------------------------------------
-train <- read.csv("plotdata/train.csv", header = T, stringsAsFactors = F)
-
-
-btc <- plot_ly(data = train, x = ~Month_Year, type = 'candlestick', 
-             open = ~Open, 
-             close = ~Close, 
-             high = ~High, 
-             low = ~Low,
-             color = ~coin) 
-
-
-p
-
-### END OF CODE ###-------------------------------------------------------------
-
