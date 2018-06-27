@@ -108,8 +108,13 @@ dashboardBody(
                 results in the following research question:",
                 br(),
                 br(),
-                "Is it possible to predict future price-levels for crypto 
+                "RQ1: Is it possible to predict future price-levels for crypto 
                 currencies based on historical data?",
+                br(),
+                br(),
+                "RQ2: Do different classification methods yield different
+                prediction accuracies when predicting crypto prices based on 
+                historic data",
                 width = 12 
               )
             )
@@ -162,6 +167,12 @@ dashboardBody(
                 and converting the remaining strings in numeric values. Finaly, 
                 in dealing with missing values (NAs) in the data set, it was 
                 determined to take the mean values of the particular columns.", 
+                width = 12),
+            box(h3("Time-series of market prices"),
+                "Insert Jurgen's time-series plot",
+                br(),
+                br(),
+                "Insert explanation en conclusion of time-seris plot here",
                 width = 12),
             box(h3("Elaboration on the packages used during the project"),
               "During the research project, several packages were used. 
@@ -219,7 +230,10 @@ dashboardBody(
             ),
     tabItem(tabName = "Results",
             h2("Results", align = 'center'),
-            box("Insert results here", width = 12)
+            box(h3("KNN prediction of market"),
+                "Insert explanation here", width = 12),
+            box(h3("Random Forest prediction of market"),
+                "Insert explanation here", width = 12)
             ),
     tabItem(tabName = "Conclusion",
             h2("Conclusion", align = 'center'),
