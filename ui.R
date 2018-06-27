@@ -23,7 +23,7 @@ dashboardPage(
     sidebarMenu(
       menuItem("Introduction",
                tabName = "crypto",
-               icon = icon("bitcoin")),
+               icon = icon("file")),
       menuItem("Data Overview",
                tabName = "data_overview",
                icon = icon("database")),
@@ -100,14 +100,29 @@ dashboardBody(
               ),
               box(
                 h3("The aim of this report"),
-                "Is it possible to predict future price-levels for crypto 
-                currencies based on historical data?"
-                , width = 12
+                "Although investing in cryptocurrency will always contain
+                elements of speculation, by utilizing historical data it might
+                be possible to make better argumented, data-driven, decisions.
+                This report is, therefore, aimed at trying out different 
+                classification methods on a dataset containing historic market 
+                data, in order to try to predict future price levels. This
+                results in the following research question:",
+                br(),
+                br(),
+                "RQ1: Is it possible to predict future price-levels for crypto 
+                currencies based on historical data?",
+                br(),
+                br(),
+                "RQ2: Do different classification methods yield different
+                prediction accuracies when predicting crypto prices based on 
+                historic data",
+                width = 12 
               )
             )
-            ),
+          ),
     tabItem(tabName = "data_overview",
             h2("Overview of the data", align = 'center'),
+            fluidRow(
             box(h3("Origin of the data"),
               "Retrieved from Kaggle, the original cryptocurrency dataset
               “CryptocoinsHistoricalPrices.csv” is a collection of daily 
@@ -120,6 +135,26 @@ dashboardBody(
               regarding price, change in price, market capitalization, 
               total supply of the coin, and the 24 hour trading volume of the 
               coin (CoinMarketCap, 2018).", width = 12),
+            box(h3("Explanation of the variables"),
+                "Date - the day of recored values",
+                br(),
+                "Open - the opening price (in USD)",
+                br(),
+                "High - the highest price (in USD)",
+                br(),
+                "Low - the lowest price (in USD)",
+                br(),
+                "Close - the closing price (in USD)",
+                br(),
+                "Volume - total exchanged volume (in USD)",
+                br(),
+                "Market.Cap - the total market captipalization for the coin 
+                (in USD)",
+                br(),
+                "coin - the name of the coin",
+                br(),
+                "Delta - calculated as (Close - Open) / Open",
+                width = 12),
             box(h3("Pre-processing"),
                 "Prior to visualizing and modelling the data some cleaning and 
                 sub setting was required. First of all,  due to the size of the 
@@ -134,8 +169,11 @@ dashboardBody(
                 in dealing with missing values (NAs) in the data set, it was 
                 determined to take the mean values of the particular columns.", 
                 width = 12),
-            box(h3("Explanation of the variables"),
-                "",
+            box(h3("Time-series of market prices"),
+                "Insert Jurgen's time-series plot",
+                br(),
+                br(),
+                "Insert explanation en conclusion of time-seris plot here",
                 width = 12),
             box(h3("Elaboration on the packages used during the project"),
               "During the research project, several packages were used. 
@@ -166,8 +204,9 @@ dashboardBody(
               TimeSeries was used to visualize the price-levels over time. This 
               information was the foundation for our research project 
               (Wuertz et al., 2017). ", width = 12
+              )
             )
-            ),
+          ),
     tabItem(tabName = "visualizations",
             h2("Data visualizations", align = 'center'),
             box(width = 3,
@@ -195,7 +234,10 @@ dashboardBody(
             ),
     tabItem(tabName = "Results",
             h2("Results", align = 'center'),
-            box("Insert results here", width = 12)
+            box(h3("KNN prediction of market"),
+                "Insert explanation here", width = 12),
+            box(h3("Random Forest prediction of market"),
+                "Insert explanation here", width = 12)
             ),
     tabItem(tabName = "Conclusion",
             h2("Conclusion", align = 'center'),
