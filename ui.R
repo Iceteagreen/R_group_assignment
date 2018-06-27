@@ -1,16 +1,17 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
-#install.packages("shinydashboard")
+## Programming in R - Group Project
+
+## This is the user-interface definition of a Shiny web application. You can
+## run the application by clicking 'Run App' above.
+
+## Yorick Schekermans u717419 , Jurgen van den Hoogen u919127,
+## Decio Da Silveira Quiosa u283203, Bastiaan de Groot u642447,
+## Jarno Vrolijk, Koen Hendriks u688250.
+
+## Installing required packages ------------------------------------------------
 library(shinydashboard)
-#install.packages("timeSeries")
 library(timeSeries)
 
+## Dashboard UI ----------------------------------------------------------------
 dashboardPage(
   dashboardHeader(
     title = "Cryptocurreny Dashboard",
@@ -19,33 +20,24 @@ dashboardPage(
   
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Introduction to cryptocurrency",
+      menuItem("Introduction",
                tabName = "crypto",
-               icon = icon("google")),
-      menuItem("The origin of the Data",
-               tabName = "origin",
-               icon = icon("google")),
-      menuItem("Research Questions",
-               tabName = "question",
-               icon = icon("google")),
-      menuItem("R packages",
-               tabName = "package",
-               icon = icon("google")),
+               icon = icon("bitcoin")),
       menuItem("Data Overview",
                tabName = "data_overview",
-               icon = icon("google")),
+               icon = icon("database")),
       menuItem("Visualizations",
                tabName = "visualizations",
-               icon = icon("google")),
+               icon = icon("signal")),
       menuItem("Results",
                tabName = "Results",
-               icon = icon("google")),
+               icon = icon("file")),
       menuItem("Conclusion",
                tabName = "Conclusion",
-               icon = icon("google")),
+               icon = icon("file")),
       menuItem("References",
                tabName = "References",
-               icon = icon("google"))
+               icon = icon("file"))
       
     )
   ),
@@ -55,13 +47,13 @@ dashboardBody(
     tabItem(tabName = "crypto",
             h2("A brief introduction", align = 'center'),
             fluidRow(
-              valueBox(1640, "Different coins",
+              valueBox("1,640", "Different coins",
                       icon = icon("bitcoin"),
                       color = "orange"),
-              valueBox(23952849, "Amount of wallets",
+              valueBox("23,952,849", "Amount of wallets",
                       icon = icon("briefcase"),
                       color = "orange"),
-              valueBox(334436919408, "Total market value",
+              valueBox("334,436,919,408", "Total market value",
                       icon = icon("dollar"),
                       color = "orange")
             ),
@@ -104,17 +96,18 @@ dashboardBody(
                 financial gain. Hence, individuals speculate on exchange rates 
                 (CryptoCurreny Facts, n.d.)."
                 , width = 12
+              ),
+              box(
+                h3("The aim of this report"),
+                "Is it possible to predict future price-levels for crypto 
+                currencies based on historical data?"
+                , width = 12
               )
-              
-              
             )
-              
-
-    ),
-    tabItem(tabName = "origin",
-            h2("The origin of the data", align = 'center'),
-            
-            box(
+            ),
+    tabItem(tabName = "data_overview",
+            h2("Overview of the data", align = 'center'),
+            box(h3("Origin of the data"),
               "Retrieved from Kaggle, the original cryptocurrency dataset
               “CryptocoinsHistoricalPrices.csv” is a collection of daily 
               historical prices for more than 1000 coins which existed between 
@@ -125,56 +118,7 @@ dashboardBody(
               By aggregating these data, they are able to provide information 
               regarding price, change in price, market capitalization, 
               total supply of the coin, and the 24 hour trading volume of the 
-              coin (CoinMarketCap, 2018).", width = 12
-            )
-            ),
-    
-    tabItem(tabName = "question",
-            h2("The research questions", align = 'center'),
-            
-            box(h3("Research question 1", align = "left"),
-              "Is it possible to predict future price-levels for crypto 
-              currencies based on historical data?",
-              br(),
-              h3("Research question 2", align = "left"),
-              "Does the accuracy of the predicted prices-level deviate between
-              crypto currencies?", width = 12)
-            ),
-    tabItem(tabName = "package",
-            h2("Elaboration on used packages", align = 'center'),
-            box(
-              "During the research project, several packages were used. 
-              This section provides information about additional packages that 
-              are used during this project. Next to that, some base packages 
-              are included e.g. Dplyr, GGplot and tidyr. Every additional 
-              package is described separately.", 
-              br(),
-              h3("Shiny Dashboard"),
-              "Shiny dashboard is an application that elaborates on the regular 
-              shiny package. This package is used in this project to create a 
-              dashboard that is interactive for visualizing the total project 
-              and can be consulted through a web browser (CRAN R project, 17).",
-              br(),
-              h3("Caret"),
-              "This package is widely used for creating predictive models. The 
-              features that are used in this project are the K-nearest neighbor 
-              function to predict if future price-levels will go up or down for 
-              the four biggest crypto currencies (Kuhn, 2018).", 
-              br(),
-              h3("Plotly"),
-              "This package is an alternative of GGplot for visualizing the 
-              data. Plotly is directly interactive and can be implemented easily
-              in a shiny dashboard (Plotly, 2017).",
-              br(),
-              h3("TimeSeries"), 
-              "To get a general idea of the development of crypto currencies, 
-              TimeSeries was used to visualize the price-levels over time. This 
-              information was the foundation for our research project 
-              (Wuertz et al., 2017). ", width = 12
-            )
-            ),
-    tabItem(tabName = "data_overview",
-            h2("Overview of the data", align = 'center'),
+              coin (CoinMarketCap, 2018).", width = 12),
             box(h3("Pre-processing"),
                 "Prior to visualizing and modelling the data some cleaning and 
                 sub setting was required. First of all,  due to the size of the 
@@ -191,7 +135,37 @@ dashboardBody(
                 width = 12),
             box(h3("Explanation of the variables"),
                 "",
-                width = 12)
+                width = 12),
+            box(h3("Elaboration on the packages used during the project"),
+              "During the research project, several packages were used. 
+              This section provides information about additional packages that 
+              are used during this project. Next to that, some base packages 
+              are included e.g. Dplyr, GGplot and tidyr. Every additional 
+              package is described separately.", 
+              br(),
+              h4("Shiny Dashboard"),
+              "Shiny dashboard is an application that elaborates on the regular 
+              shiny package. This package is used in this project to create a 
+              dashboard that is interactive for visualizing the total project 
+              and can be consulted through a web browser (CRAN R project, 17).",
+              br(),
+              h4("Caret"),
+              "This package is widely used for creating predictive models. The 
+              features that are used in this project are the K-nearest neighbor 
+              function to predict if future price-levels will go up or down for 
+              the four biggest crypto currencies (Kuhn, 2018).", 
+              br(),
+              h4("Plotly"),
+              "This package is an alternative of GGplot for visualizing the 
+              data. Plotly is directly interactive and can be implemented easily
+              in a shiny dashboard (Plotly, 2017).",
+              br(),
+              h4("TimeSeries"), 
+              "To get a general idea of the development of crypto currencies, 
+              TimeSeries was used to visualize the price-levels over time. This 
+              information was the foundation for our research project 
+              (Wuertz et al., 2017). ", width = 12
+            )
             ),
     tabItem(tabName = "visualizations",
             h2("Data visualizations", align = 'center'),

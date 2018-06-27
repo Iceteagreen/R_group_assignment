@@ -1,67 +1,102 @@
-# Loading Packages -------------------------------------------------------------
+## Programming in R - Group Project
+
+## This is the server definition of a Shiny web application. You can
+## run the application by clicking 'Run App' above.
+
+## Yorick Schekermans u717419 , Jurgen van den Hoogen u919127,
+## Decio Da Silveira Quiosa u283203, Bastiaan de Groot u642447,
+## Jarno Vrolijk, Koen Hendriks u688250.
+
+## Cleaning memory -------------------------------------------------------------
+rm(list = ls())
+
+## Loading dataset -------------------------------------------------------------
+crypto_prices <- read.csv("input/crypto_prices.csv", 
+                          header = T, 
+                          stringsAsFactors = F)
+
+## Loading libraries -----------------------------------------------------------  
 library(plotly)
 library(dplyr)
 library(caret)
 
-# Loading the dataset ----------------------------------------------------------
-crypto_prices <- read.csv('input/crypto_prices.csv')
-# Subsetting the top 4 coins ------------------------------------------------------------------
+## Top 4 coins -----------------------------------------------------------------
 prices <- subset(crypto_prices, coin == "BTC" | 
                    coin == "ETH" | 
                    coin == "XRP" | 
                    coin == "BCH")
 
-# Creating months --------------------------------------------------------------
+## Creating months -------------------------------------------------------------
 prices$Months <- substr(prices$Date, 6, 7)
 prices$Year <- substr(prices$Date, 1, 4)
 prices$Day <- substr(prices$Date, 9, 10)
 prices$Month_Year <- paste(prices$Year, prices$Months, sep = "-")
 
-# Cleaning variables -----------------------------------------------------------
+## Cleaning variables ----------------------------------------------------------
 prices$Volume <- as.numeric(gsub(",", "", prices$Volume))
 prices$Market.Cap <- as.numeric(gsub(",", "", prices$Market.Cap))
 prices$coin <- as.factor(prices$coin)
 
-# Removing NA ------------------------------------------------------------------
-prices[is.na(prices[,6]), 6] <- mean(prices[,6], na.rm = TRUE)
-prices[is.na(prices[,7]), 7] <- mean(prices[,7], na.rm = TRUE)
+## Removing NA ----------------------------------------------------------------
+index_na <- which(is.na(prices$Volume))
+prices$Volume[index_na] <- mean(prices$Volume, na.rm = T)
 
-# Moving average --------------------------------------------------------------- 
-moving_average <- function(x, n){
-  cx <- c(0,cumsum(ifelse(is.na(x), 0, x)))
-  rsum <- (cx[(n+1):length(cx)] - cx[1:(length(cx) - n)]) / n
-}
+index_na <- which(is.na(prices$Market.Cap))
+prices$Market.Cap[index_na] <- mean(prices$Market.Cap, na.rm = T)
 
-# Creating up / down method ----------------------------------------------------
+## Creating up / down method ---------------------------------------------------
 prices$market_direction <- "None"
 prices$market_direction <- as.factor(ifelse(prices$Delta < 0, "Down", "Up"))
 
-# Train/ Test set --------------------------------------------------------------
-prices %>%
-  group_by(prices, c(Date, coin))
+## Creating lag variabel -------------------------------------------------------
+prices$earlier_price_1 <- 0
+prices$earlier_price_1 <- lag(prices$Delta, k = 1)
+prices$earlier_price_2 <- lag(prices$Delta, k = 2)
 
+## Train/ Test set -------------------------------------------------------------
 index <- nrow(prices) * 0.2
 
+prices <- group_by(prices, Date, coin)
 test <- prices[1:index,]
 train <- prices[index:nrow(prices),]
 
+##Training a model to predict new prices
+## Gridsearch ------------------------------------------------------------------
+kg <- expand.grid(k = c(1, 2, 3, 4, 5, 10))
 
-# Training a model to predict new prices
-trctrl <- trainControl(method = "repeatedcv", number = 10, repeats = 3)
-model.fit <- train(market_direction ~ Open + Close + 
-                     Volume + Market.Cap + coin + Delta, 
+## Fitting the KNN -------------------------------------------------------------
+knctrl <- trainControl(method = "repeatedcv", number = 5, repeats = 5)
+model.fit <- train(market_direction ~ Open + Volume + Market.Cap + coin +
+                     earlier_price_1 + earlier_price_2, 
                    data = train, 
                    method = "knn",
-                   trControl=trctrl,
+                   trControl= knctrl,
                    preProcess = c("center", "scale"),
-                   tuneLength = 10)
+                   tuneGrid = kg)
 
+## Fitting RandomForest --------------------------------------------------------
+rfcntrl <- trainControl(method = "repeatedcv", repeats = 1)
+system.time({forest.fit <- train(market_direction ~ Open + Volume + Market.Cap +
+                                 coin + earlier_price_1 + earlier_price_2,
+                                 data = train,
+                                 method = "rf",
+                                 trControl = rfcntrl,
+                                 preProcess = c("center", "scale"),
+                                 tuneLength = 10)})
 
-# Validation -------------------------------------------------------------------
+## Validation ------------------------------------------------------------------
+## KNN Prediction --------------------------------------------------------------
 results <- predict(model.fit, test)
-confusionMatrix(results, test$market_direction)
+confusionMatrix(results, test$market_direction[2:nrow(test)])
 
-# Visualizing candlestick ------------------------------------------------------
+## We start from the second entry, because the first entry has no value due to
+## the lag function! 
+
+## Random Forest Prediction ----------------------------------------------------
+forest.pred <- predict(forest.fit, newdata = test)
+confusionMatrix(forest.pred, test$market_direction[2:nrow(test)])
+
+## Visualizing candlestick -----------------------------------------------------
 rs <- list(visible = TRUE, x = 0.5, y = -0.055,
            xanchor = 'center', yref = 'paper',
            font = list(size = 9))
@@ -74,7 +109,7 @@ p <- plot_ly(data = train, x = ~Month_Year, type = 'candlestick',
              color = ~coin) 
 pp <- train %>%
   plot_ly(x = ~Month_Year, y = ~Volume, type='bar', name = "Volume",
-          color = ~market_direction, colors = c('#17BECF','#7F7F7F')) %>%
+          color = ~market_direction, colors = c('green','red')) %>%
   layout(yaxis = list(title = "Volume"))
 p <- subplot(p, pp, heights = c(0.7,0.2), nrows=2,
              shareX = TRUE, titleY = TRUE) %>%
@@ -99,9 +134,10 @@ server <- function(input, output) {
   })
   
   # Add reactive data information
-  # https://stackoverflow.com/questions/40872124/subfiltering-dataset-in-shiny-reactive?rq=1
+  # https://stackoverflow.com/questions/40872124/subfiltering-
+  # dataset-in-shiny-reactive?rq=1
   
-  #Plot 1
+  # Plot 1
   output$plot1<-renderPlot({
     ggplot(df, aes(x = df$Date, y = df$Market.Cap)) + geom_point(colour = 'red')},
     height = 400, width = 600) 
