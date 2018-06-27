@@ -125,7 +125,5 @@ candlestick <- subplot(p, pp, heights = c(0.7,0.2), nrows=2,
                font = list(size = 10),
                bgcolor = 'transparent'))
 
-p
-
 ### END OF CODE ###-------------------------------------------------------------
 

@@ -218,20 +218,13 @@ dashboardBody(
                                          "Ethereum" = "ETH",
                                          "Ripple" = "XRP", 
                                          "Bitcoin Cash" = "BCH"),
-                          selected = "BTC"),
-              sliderInput("range", 
-                          label = "Range of interest:",
-                          min = 2010, max = 2018, value = c(2010, 2018))
+                          selected = "BTC")
               ),
             box(width = 9,
               textOutput("selected_coin"),
-              textOutput("min_max"),
               plotOutput("plot1")
-            ),
-            box(width = 12,
-                plotOutput("plot2")
             )
-            ),
+    ),
     tabItem(tabName = "Results",
             h2("Results", align = 'center'),
             box("Insert  1st paragraph of Jurgen's result section", width = 12),

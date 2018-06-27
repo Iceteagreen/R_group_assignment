@@ -10,93 +10,46 @@
 ## Cleaning memory -------------------------------------------------------------
 rm(list = ls())
 
-## Loading dataset -------------------------------------------------------------
-crypto_prices <- read.csv("input/crypto_prices.csv", 
-                          header = T, 
-                          stringsAsFactors = F)
-
 ## Loading libraries -----------------------------------------------------------  
 library(plotly)
 library(dplyr)
 library(caret)
+library(TTR)
+library(timeSeries)
+library(ggplot2)
+library(psych)
+library(tidyr)
 
-## Top 4 coins -----------------------------------------------------------------
-prices <- subset(crypto_prices, coin == "BTC" | 
-                   coin == "ETH" | 
-                   coin == "XRP" | 
-                   coin == "BCH")
+# Visualizing timeseries  ------------------------------------------------------
+## Load the data ---------------------------------------------------------------
+crypto_prices2 <- read.csv("input/crypto_prices.csv", stringsAsFactors = FALSE)
 
-## Creating months -------------------------------------------------------------
-prices$Months <- substr(prices$Date, 6, 7)
-prices$Year <- substr(prices$Date, 1, 4)
-prices$Day <- substr(prices$Date, 9, 10)
-prices$Month_Year <- paste(prices$Year, prices$Months, sep = "-")
+## Average price of the coins per day
+crypto_prices2$Price <- (crypto_prices2$Open + crypto_prices2$Close) / 2
 
-## Cleaning variables ----------------------------------------------------------
-prices$Volume <- as.numeric(gsub(",", "", prices$Volume))
-prices$Market.Cap <- as.numeric(gsub(",", "", prices$Market.Cap))
-prices$coin <- as.factor(prices$coin)
+## Make an object only containing BTC because it acts as a benchmark for other
+## crypto currencies
+btc <- crypto_prices2[crypto_prices2$coin %in%
+                        c("BTC"), ]
 
-## Removing NA ----------------------------------------------------------------
-index_na <- which(is.na(prices$Volume))
-prices$Volume[index_na] <- mean(prices$Volume, na.rm = T)
+## New object with only relevant columns for the timeseries analysis
+btc2 <- data.frame(select(btc, Price, Date))
+btc2$Date <- gsub("-", "", btc2$Date)
+btc2$Date <- as.numeric(btc2$Date)
+btc2 <- arrange(btc2, Date)
+btc2$Date <- NULL
 
-index_na <- which(is.na(prices$Market.Cap))
-prices$Market.Cap[index_na] <- mean(prices$Market.Cap, na.rm = T)
+## Building the timeseries for BTC
+btc_time <- ts(btc2)
+btc_time
 
-## Creating up / down method ---------------------------------------------------
-prices$market_direction <- "None"
-prices$market_direction <- as.factor(ifelse(prices$Delta < 0, "Down", "Up"))
+## plots for timeseries BTC
+ts <- plot.ts(btc_time)
 
-## Creating lag variabel -------------------------------------------------------
-prices$earlier_price_1 <- 0
-prices$earlier_price_1 <- lag(prices$Delta, k = 1)
-prices$earlier_price_2 <- lag(prices$Delta, k = 2)
 
-## Train/ Test set -------------------------------------------------------------
-index <- nrow(prices) * 0.2
+# Visualizing candlestick ------------------------------------------------------
+train <- read.csv("plotdata/train.csv", header = T, stringsAsFactors = F)
 
-prices <- group_by(prices, Date, coin)
-test <- prices[1:index,]
-train <- prices[index:nrow(prices),]
-
-##Training a model to predict new prices
-## Gridsearch ------------------------------------------------------------------
-kg <- expand.grid(k = c(1, 2, 3, 4, 5, 10))
-
-## Fitting the KNN -------------------------------------------------------------
-knctrl <- trainControl(method = "repeatedcv", number = 5, repeats = 5)
-model.fit <- train(market_direction ~ Open + Volume + Market.Cap + coin +
-                     earlier_price_1 + earlier_price_2, 
-                   data = train, 
-                   method = "knn",
-                   trControl= knctrl,
-                   preProcess = c("center", "scale"),
-                   tuneGrid = kg)
-
-## Fitting RandomForest --------------------------------------------------------
-rfcntrl <- trainControl(method = "repeatedcv", repeats = 1)
-system.time({forest.fit <- train(market_direction ~ Open + Volume + Market.Cap +
-                                 coin + earlier_price_1 + earlier_price_2,
-                                 data = train,
-                                 method = "rf",
-                                 trControl = rfcntrl,
-                                 preProcess = c("center", "scale"),
-                                 tuneLength = 10)})
-
-## Validation ------------------------------------------------------------------
-## KNN Prediction --------------------------------------------------------------
-results <- predict(model.fit, test)
-confusionMatrix(results, test$market_direction[2:nrow(test)])
-
-## We start from the second entry, because the first entry has no value due to
-## the lag function! 
-
-## Random Forest Prediction ----------------------------------------------------
-forest.pred <- predict(forest.fit, newdata = test)
-confusionMatrix(forest.pred, test$market_direction[2:nrow(test)])
-
-## Visualizing candlestick -----------------------------------------------------
 rs <- list(visible = TRUE, x = 0.5, y = -0.055,
            xanchor = 'center', yref = 'paper',
            font = list(size = 9))
@@ -107,12 +60,14 @@ p <- plot_ly(data = train, x = ~Month_Year, type = 'candlestick',
              high = ~High, 
              low = ~Low,
              color = ~coin) 
+
 pp <- train %>%
   plot_ly(x = ~Month_Year, y = ~Volume, type='bar', name = "Volume",
           color = ~market_direction, colors = c('green','red')) %>%
   layout(yaxis = list(title = "Volume"))
+
 p <- subplot(p, pp, heights = c(0.7,0.2), nrows=2,
-             shareX = TRUE, titleY = TRUE) %>%
+                       shareX = TRUE, titleY = TRUE) %>%
   layout(xaxis = list(rangeselector = rs),
          legend = list(orientation = 'h', x = 0.5, y = 1,
                        xanchor = 'center', yref = 'paper',
@@ -143,7 +98,9 @@ server <- function(input, output) {
     #height = 400, width = 600) 
   
   # Plot 2
-  output$plot2<-renderPlot({p})
+  output$plot1<-renderPlot({
+  p},
+  height = 400, width = 600) 
 }
 
 ### END OF CODE ################################################################
