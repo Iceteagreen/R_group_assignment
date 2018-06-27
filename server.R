@@ -21,45 +21,60 @@ library(TTR)
 # Visualizing candlestick ------------------------------------------------------
 train <- read.csv("plotdata/train.csv", header = T, stringsAsFactors = F)
 
+btc <- train %>%
+  filter(coin == "BTC")
+
+eth <- train %>%
+  filter(coin == "ETH")
+
+xrp <- train %>%
+  filter(coin == "XRP")
+
+bch <- train %>%
+  filter(coin == "BCH")
+
 
 
 ## Dashboard Set Up ------------------------------------------------------------
 server <- function(input, output) {
   
-  # Selected coin
-  output$selected_coin <- renderText({ 
-    paste("You have selected", input$coin)
-  })
+  # BTC Plot
+  btc_plot <- plot_ly(data = btc, x = ~Month_Year, type = 'candlestick', 
+                      open = ~Open, 
+                      close = ~Close, 
+                      high = ~High, 
+                      low = ~Low,
+                      color = ~coin)
   
-  # Selected period
-  output$min_max <- renderText({ 
-    paste("You have chosen a timeperiod that goes from",
-          input$range[1], "to", input$range[2])
-  })
+  # BTC Plot
+  eth_plot <- plot_ly(data = eth, x = ~Month_Year, type = 'candlestick', 
+                      open = ~Open, 
+                      close = ~Close, 
+                      high = ~High, 
+                      low = ~Low,
+                      color = ~coin)
   
-  # Add reactive data information
-  # https://stackoverflow.com/questions/40872124/subfiltering-
-  # dataset-in-shiny-reactive?rq=1
+  # BTC Plot
+  xrp_plot <- plot_ly(data = xrp, x = ~Month_Year, type = 'candlestick', 
+                      open = ~Open, 
+                      close = ~Close, 
+                      high = ~High, 
+                      low = ~Low,
+                      color = ~coin)
   
-  # Plot 1
-  #output$plot1<-renderPlot({
-    #ggplot(df, aes(x = df$Date, y = df$Market.Cap)) + geom_point(colour = 'red')},
-    #height = 400, width = 600) 
+  # BTC Plot
+  bch_plot <- plot_ly(data = bch, x = ~Month_Year, type = 'candlestick', 
+                      open = ~Open, 
+                      close = ~Close, 
+                      high = ~High, 
+                      low = ~Low,
+                      color = ~coin)
   
-  # Plot 1
-  #output$plot1<-renderPlot({
-  #ts})
-  
-  
-  p <- plot_ly(data = train, x = ~Month_Year, type = 'candlestick', 
-               open = ~Open, 
-               close = ~Close, 
-               high = ~High, 
-               low = ~Low,
-               color = ~coin) 
-  
-  # Plot 2
-  output$plot2<-renderPlotly({p})
+  # Plot outputs
+  output$plot_btc<-renderPlotly({btc_plot})
+  output$plot_eth<-renderPlotly({eth_plot})
+  output$plot_xrp<-renderPlotly({xrp_plot})
+  output$plot_bch<-renderPlotly({bch_plot})
 }
 
 ### END OF CODE ################################################################

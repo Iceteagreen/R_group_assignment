@@ -103,7 +103,7 @@ write.csv(train, file = 'plotdata/train.csv', row.names = FALSE)
 train <- read.csv("plotdata/train.csv", header = T, stringsAsFactors = F)
 
 
-p <- plot_ly(data = train, x = ~Month_Year, type = 'candlestick', 
+btc <- plot_ly(data = train, x = ~Month_Year, type = 'candlestick', 
              open = ~Open, 
              close = ~Close, 
              high = ~High, 

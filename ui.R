@@ -27,8 +27,17 @@ dashboardPage(
       menuItem("Data Overview",
                tabName = "data_overview",
                icon = icon("database")),
-      menuItem("Visualizations",
-               tabName = "visualizations",
+      menuItem("Bitcoin Visualization",
+               tabName = "bitcoin",
+               icon = icon("signal")),
+      menuItem("Ethereum Visualization",
+               tabName = "ethereum",
+               icon = icon("signal")),
+      menuItem("Ripple Visualization",
+               tabName = "ripple",
+               icon = icon("signal")),
+      menuItem("Bitcoin Cash Visualization",
+               tabName = "bitcoin-cash",
                icon = icon("signal")),
       menuItem("Results",
                tabName = "Results",
@@ -172,7 +181,7 @@ dashboardBody(
             box(h3("Time-series of market prices"),
                 "Insert Jurgen's time-series plot",
                 br(),
-                img(src='timeseries.png', height='400', width='600'),
+                img(src="https://image.ibb.co/kot6C8/timeseries.png", height='400', width='600'),
                 br(),
                 "Insert explanation en conclusion of time-seris plot here",
                 width = 12),
@@ -208,22 +217,28 @@ dashboardBody(
               )
             )
           ),
-    tabItem(tabName = "visualizations",
-            h2("Data visualizations", align = 'center'),
-            box(width = 3,
-              helpText("Show cryptocurrency value
-                       for selected period."),
-              selectInput("coin", 
-                          label = "Choose a currency to display",
-                          choices = list("Bitcoin" = "BTC",
-                                         "Ethereum" = "ETH",
-                                         "Ripple" = "XRP", 
-                                         "Bitcoin Cash" = "BCH"),
-                          selected = "BTC")
-              ),
-            box(width = 9,
-              textOutput("selected_coin"),
-              plotlyOutput("plot2")
+    tabItem(tabName = "bitcoin",
+            h2("Bitcoin visualization", align = 'center'),
+            box(width = 12,
+              plotlyOutput("plot_btc")
+            )
+    ),
+    tabItem(tabName = "ethereum",
+            h2("Ethereum visualization", align = 'center'),
+            box(width = 12,
+                plotlyOutput("plot_eth")
+            )
+    ),
+    tabItem(tabName = "ripple",
+            h2("Ripple visualization", align = 'center'),
+            box(width = 12,
+                plotlyOutput("plot_xrp")
+            )
+    ),
+    tabItem(tabName = "bitcoin-cash",
+            h2("Bitcoin Cash visualization", align = 'center'),
+            box(width = 12,
+                plotlyOutput("plot_bch")
             )
     ),
     tabItem(tabName = "Results",
