@@ -10,6 +10,7 @@
 ## Installing required packages ------------------------------------------------
 library(shinydashboard)
 library(timeSeries)
+library(plotly)
 
 ## Dashboard UI ----------------------------------------------------------------
 dashboardPage(
@@ -187,6 +188,9 @@ dashboardBody(
               textOutput("selected_coin"),
               textOutput("min_max"),
               plotOutput("plot1")
+            ),
+            box(width = 12,
+                plotOutput("plot2")
             )
             ),
     tabItem(tabName = "Results",

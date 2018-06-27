@@ -67,3 +67,4 @@ plot( btc1, which = 2)
 summary( btc1 )
 standardCoefs( btc1 )
 mean(btc$Open)
+

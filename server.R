@@ -138,9 +138,12 @@ server <- function(input, output) {
   # dataset-in-shiny-reactive?rq=1
   
   # Plot 1
-  output$plot1<-renderPlot({
-    ggplot(df, aes(x = df$Date, y = df$Market.Cap)) + geom_point(colour = 'red')},
-    height = 400, width = 600) 
+  #output$plot1<-renderPlot({
+    #ggplot(df, aes(x = df$Date, y = df$Market.Cap)) + geom_point(colour = 'red')},
+    #height = 400, width = 600) 
+  
+  # Plot 2
+  output$plot2<-renderPlot({p})
 }
 
 ### END OF CODE ################################################################
