@@ -22,7 +22,7 @@ dashboardPage(
     sidebarMenu(
       menuItem("Introduction",
                tabName = "crypto",
-               icon = icon("bitcoin")),
+               icon = icon("file")),
       menuItem("Data Overview",
                tabName = "data_overview",
                icon = icon("database")),
@@ -99,14 +99,24 @@ dashboardBody(
               ),
               box(
                 h3("The aim of this report"),
+                "Although investing in cryptocurrency will always contain
+                elements of speculation, by utilizing historical data it might
+                be possible to make better argumented, data-driven, decisions.
+                This report is, therefore, aimed at trying out different 
+                classification methods on a dataset containing historic market 
+                data, in order to try to predict future price levels. This
+                results in the following research question:",
+                br(),
+                br(),
                 "Is it possible to predict future price-levels for crypto 
-                currencies based on historical data?"
-                , width = 12
+                currencies based on historical data?",
+                width = 12 
               )
             )
-            ),
+          ),
     tabItem(tabName = "data_overview",
             h2("Overview of the data", align = 'center'),
+            fluidRow(
             box(h3("Origin of the data"),
               "Retrieved from Kaggle, the original cryptocurrency dataset
               “CryptocoinsHistoricalPrices.csv” is a collection of daily 
@@ -165,8 +175,9 @@ dashboardBody(
               TimeSeries was used to visualize the price-levels over time. This 
               information was the foundation for our research project 
               (Wuertz et al., 2017). ", width = 12
+              )
             )
-            ),
+          ),
     tabItem(tabName = "visualizations",
             h2("Data visualizations", align = 'center'),
             box(width = 3,
