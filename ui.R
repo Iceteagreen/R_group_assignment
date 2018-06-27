@@ -172,6 +172,7 @@ dashboardBody(
             box(h3("Time-series of market prices"),
                 "Insert Jurgen's time-series plot",
                 br(),
+                img(src='timeseries.png'),
                 br(),
                 "Insert explanation en conclusion of time-seris plot here",
                 width = 12),
@@ -222,7 +223,7 @@ dashboardBody(
               ),
             box(width = 9,
               textOutput("selected_coin"),
-              plotOutput("plot1")
+              plotOutput("plot2")
             )
     ),
     tabItem(tabName = "Results",
